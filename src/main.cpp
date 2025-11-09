@@ -8,7 +8,6 @@
 
 namespace fs = std::filesystem;
 
-// ---------- Helpers ----------
 std::string perms_to_string(fs::perms p) {
     auto bit = [&](fs::perms b, char c){ return ( (p & b) != fs::perms::none ) ? c : '-'; };
     std::string s;
@@ -51,7 +50,6 @@ void print_entry(const fs::directory_entry& e) {
         std::error_code ec; size = fs::file_size(e.path(), ec);
     }
 
-    // Convert filesystem clock -> system_clock to get time_t (portable)
     auto ftime = fs::last_write_time(e.path());
     auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
         ftime - fs::file_time_type::clock::now() + std::chrono::system_clock::now()
@@ -189,7 +187,6 @@ void chmod_octal(const fs::path& p, const std::string& oct) {
     if (ec) std::cerr << "chmod: " << ec.message() << "\n";
 }
 
-// ---------- REPL ----------
 int main() {
     std::cout << "File Explorer (C++17, Linux/WSL)\n";
     help();
@@ -265,3 +262,4 @@ int main() {
     }
     return 0;
 }
+
